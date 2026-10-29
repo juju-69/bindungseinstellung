@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Z-Wert Rechner</title>
+<style>
+:root{--v:#6A00F4;--a:#FFD6A5;color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);background:var(--v)}
+*{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--a);font-family:"Inter","Helvetica Neue",Arial,sans-serif;font-weight:700;font-size:20px;color:var(--v);-webkit-font-smoothing:antialiased}
+.in{max-width:960px;margin:0 auto;padding:0 20px}
+.top{background:var(--v);color:var(--a);padding:36px 0 40px}
+.mid{background:var(--a);color:var(--v);padding:36px 0 44px}
+.bot{background:var(--v);color:var(--a);padding:36px 0 56px}
+h1{font-size:clamp(44px,11vw,96px);line-height:.95;margin:0;font-weight:800;letter-spacing:-.03em}
+h2{font-size:clamp(30px,6vw,48px);margin:0 0 20px;font-weight:800;letter-spacing:-.025em;line-height:1}
+.res{display:grid;gap:20px;margin-top:20px}
+@media(min-width:760px){.res{grid-template-columns:1.2fr 1fr;align-items:end}}
+.z{font-size:clamp(130px,34vw,280px);line-height:.85;font-weight:800;letter-spacing:-.05em;font-variant-numeric:tabular-nums}
+.cap{font-size:22px;margin-top:8px}
+.steps{list-style:none;margin:0;padding:0;font-size:19px}
+.steps li{display:flex;justify-content:space-between;gap:12px;padding:10px 0;border-top:2px solid var(--a)}
+.steps li:last-child{border-bottom:2px solid var(--a)}
+.warn{display:none;margin-top:18px;padding:12px 14px;border:3px solid var(--a);font-size:18px;line-height:1.3}
+.f{margin-bottom:28px}
+.hint{font-weight:500;font-size:16px;line-height:1.35;margin:4px 0 0}
+.lab{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px;font-size:20px}
+.lab output{font-size:44px;font-weight:800;letter-spacing:-.03em;font-variant-numeric:tabular-nums}
+.lab small{font-size:18px;margin-left:6px}
+input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:36px;background:transparent;margin:0;cursor:pointer}
+input[type=range]::-webkit-slider-runnable-track{height:6px;background:var(--v)}
+input[type=range]::-moz-range-track{height:6px;background:var(--v)}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:30px;height:30px;background:var(--v);border:4px solid var(--a);outline:3px solid var(--v);margin-top:-12px;border-radius:50%}
+input[type=range]::-moz-range-thumb{width:22px;height:22px;background:var(--v);border:4px solid var(--a);outline:3px solid var(--v);border-radius:50%}
+.seg{display:grid;gap:0;grid-template-columns:repeat(3,1fr);border:3px solid var(--v)}
+.seg button{font:inherit;font-size:19px;padding:14px 6px;border:0;border-left:3px solid var(--v);background:transparent;color:var(--v);cursor:pointer;line-height:1.1;text-align:center}
+.seg button:first-child{border-left:0}
+.seg button span{display:block;font-weight:500;font-size:15px;margin-top:4px}
+.seg button[aria-pressed=true]{background:var(--v);color:var(--a)}
+:focus-visible{outline:4px solid var(--v);outline-offset:3px}
+.bot :focus-visible{outline-color:var(--a)}
+.tw{overflow-x:auto}
+table{border-collapse:collapse;width:100%;min-width:560px;text-align:center;font-variant-numeric:tabular-nums}
+th{padding:8px 4px;font-weight:800;font-size:16px;border-bottom:3px solid var(--a)}
+td{padding:8px 4px;border-bottom:1px solid rgba(255,214,165,.35);font-weight:500}
+td.w{text-align:left;font-weight:800;white-space:nowrap}
+td.base{outline:3px solid var(--a);outline-offset:-3px;font-weight:800}
+td.res{background:var(--a);color:var(--v);font-weight:800}
+.note{font-weight:500;font-size:16px;line-height:1.45;max-width:62ch;margin-top:22px}
+</style>
+</head>
+<body>
+<header class="top"><div class="in">
+<h1>Z-Wert</h1>
+<div class="res" aria-live="polite">
+<div><div class="z" id="z">–</div><div class="cap">empfohlene Bindungseinstellung</div></div>
+<div><ul class="steps" id="steps"></ul><div class="warn" id="warn"></div></div>
+</div></div></header>
+
+<section class="mid"><div class="in">
+<h2>Deine Daten</h2>
+<div class="f"><div class="lab"><label for="kg">Gewicht</label><span><output id="kgo"></output><small>kg</small></span></div><input id="kg" type="range" min="10" max="130" value="70"><p class="hint">Körpergewicht ohne Skiausrüstung: ohne Skischuhe, Helm und Skibekleidung gewogen.</p></div>
+<div class="f"><div class="lab"><label for="mm">Sohlenlänge des Skischuhs</label><span><output id="mmo"></output><small>mm</small></span></div><input id="mm" type="range" min="180" max="360" value="300"></div>
+<div class="f"><div class="lab"><label for="age">Alter</label><span><output id="ageo"></output><small>Jahre</small></span></div><input id="age" type="range" min="4" max="85" value="35"></div>
+<div class="f" style="margin-bottom:0"><div class="lab">Fahrkönnen</div>
+<div class="seg" id="skill">
+<button data-v="0" aria-pressed="true">Anfänger<span>Z-Wert</span></button>
+<button data-v="1" aria-pressed="false">Fortgeschritten<span>1 Zeile runter</span></button>
+<button data-v="2" aria-pressed="false">Erfahren<span>2 Zeilen runter</span></button>
+</div></div>
+</div></section>
+
+<section class="bot"><div class="in">
+<h2>So wurde gerechnet</h2>
+<div class="tw"><table id="tbl"></table></div>
+<p class="note">Umrandet ist der Schnittpunkt aus Gewicht und Sohlenlänge, gefüllt das Ergebnis nach Korrektur. Ab 95 kg gilt die Zeile „ab 96“. Die Alterskorrektur (unter 10 oder über 50 Jahre, 1 Zeile hoch) wird mit dem Fahrkönnen verrechnet. Nur eine Orientierungshilfe: Die Bindung immer von einer Fachwerkstatt einstellen und prüfen lassen.</p>
+</div></section>
+<script>
+var N=null;
+var T=[[.75,.75,N,N,N,N],[1,1,.75,N,N,N],[1.5,1.25,1,N,N,N],[1.75,1.5,1.5,1.25,N,N],[2.25,2,1.75,1.5,1.5,N],[2.75,2.5,2.25,2,1.75,1.75],[3.5,3,2.75,2.5,2.25,2],[N,3.5,3,3,2.75,2.5],[N,4.5,4,3.5,3.5,3],[N,5.5,5,4.5,4,3.5],[N,6.5,6,5.5,5,4.5],[N,7.5,7,6.5,6,5.5],[N,N,8.5,8,7,6.5],[N,N,10,9.5,8.5,8],[N,N,11.5,11,10,9.5]];
+var W=["10 – 13","14 – 17","18 – 21","22 – 25","26 – 30","31 – 35","36 – 41","42 – 48","49 – 57","58 – 66","67 – 78","79 – 94","ab 96","",""];
+var COLS=["bis 250","251 – 270","271 – 290","291 – 310","311 – 330","über 330"];
+var LIM=[13,17,21,25,30,35,41,48,57,66,78,94];
+var $=function(i){return document.getElementById(i)};
+var skill=0;
+function fmt(v){return v==null?"–":v.toFixed(2).replace(".",",")}
+function rowOf(kg){for(var i=0;i<LIM.length;i++)if(kg<=LIM[i])return i;return 12}
+function colOf(mm){return mm<=250?0:mm<=270?1:mm<=290?2:mm<=310?3:mm<=330?4:5}
+function render(){
+var kg=+$("kg").value,mm=+$("mm").value,age=+$("age").value;
+$("kgo").textContent=kg;$("mmo").textContent=mm>=360?"über 330":mm;$("ageo").textContent=age;
+var r=rowOf(kg),c=colOf(mm),ageUp=(age<10||age>50)?1:0;
+var base=T[r][c],tr=Math.max(0,Math.min(14,r+skill-ageUp)),res=T[tr][c];
+var warn=$("warn");warn.style.display="none";
+if(base==null){warn.textContent="Für diese Kombination aus Gewicht und Sohlenlänge sieht die Tabelle keinen Wert vor. Bitte in der Fachwerkstatt nachfragen.";warn.style.display="block";res=null}
+else if(res==null){warn.textContent="Nach der Korrektur landet die Auswahl in einem leeren Feld der Tabelle. Bitte in der Fachwerkstatt nachfragen.";warn.style.display="block"}
+$("z").textContent=res==null?"–":fmt(res).replace(/,00$/,"");
+$("steps").innerHTML="<li><span>Gewicht &amp; Sohle</span><span>"+fmt(base)+"</span></li><li><span>Fahrkönnen</span><span>"+(skill?skill+" Zeile"+(skill>1?"n":"")+" runter":"keine")+"</span></li><li><span>Alter</span><span>"+(ageUp?"1 Zeile hoch":"keine")+"</span></li><li><span>Ergebnis</span><span>"+fmt(res)+"</span></li>";
+var h="<tr><th>kg</th>"+COLS.map(function(x){return "<th>"+x+"</th>"}).join("")+"</tr>";
+for(var i=0;i<15;i++){h+="<tr><td class='w'>"+W[i]+"</td>";
+for(var j=0;j<6;j++){var cl="";if(i===r&&j===c&&base!=null)cl="base";if(i===tr&&j===c&&res!=null)cl+=" res";
+h+="<td class='"+cl+"'>"+(T[i][j]==null?"":fmt(T[i][j]))+"</td>"}
+h+="</tr>"}
+$("tbl").innerHTML=h;
+}
+["kg","mm","age"].forEach(function(i){$(i).addEventListener("input",render)});
+document.querySelectorAll("#skill button").forEach(function(b){b.addEventListener("click",function(){
+skill=+b.dataset.v;document.querySelectorAll("#skill button").forEach(function(x){x.setAttribute("aria-pressed",x===b)});render()})});
+render();
+</script>
+</body>
+</html>
