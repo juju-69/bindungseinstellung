@@ -5,49 +5,64 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Z-Wert Rechner</title>
 <style>
-:root{--v:#6A00F4;--a:#FFD6A5;color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);background:var(--v)}
+:root{--v:#6A00F4;--a:#FFD6A5;--s:1;--zs:1;color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+html[data-swap="1"]{--v:#FFD6A5;--a:#6A00F4}
 *{box-sizing:border-box}
-html{scroll-padding-top:env(safe-area-inset-top,0px)}
-body{margin:0;background:var(--a);font-family:"Inter","Helvetica Neue",Arial,sans-serif;font-weight:700;font-size:20px;color:var(--v);-webkit-font-smoothing:antialiased}
-.in{max-width:960px;margin:0 auto;padding:0 20px}
-.top{background:var(--v);color:var(--a);padding:36px 0 40px}
-.mid{background:var(--a);color:var(--v);padding:36px 0 44px}
-.bot{background:var(--v);color:var(--a);padding:36px 0 56px}
-h1{font-size:clamp(44px,11vw,96px);line-height:.95;margin:0;font-weight:800;letter-spacing:-.03em}
-h2{font-size:clamp(30px,6vw,48px);margin:0 0 20px;font-weight:800;letter-spacing:-.025em;line-height:1}
-.res{display:grid;gap:20px;margin-top:20px}
-@media(min-width:760px){.res{grid-template-columns:1.2fr 1fr;align-items:end}}
-.z{font-size:clamp(130px,34vw,280px);line-height:.85;font-weight:800;letter-spacing:-.05em;font-variant-numeric:tabular-nums}
-.cap{font-size:22px;margin-top:8px}
-.steps{list-style:none;margin:0;padding:0;font-size:19px}
-.steps li{display:flex;justify-content:space-between;gap:12px;padding:10px 0;border-top:2px solid var(--a)}
-.steps li:last-child{border-bottom:2px solid var(--a)}
-.warn{display:none;margin-top:18px;padding:12px 14px;border:3px solid var(--a);font-size:18px;line-height:1.3}
-.f{margin-bottom:28px}
-.hint{font-weight:500;font-size:16px;line-height:1.35;margin:4px 0 0}
-.lab{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px;font-size:20px}
-.lab output{font-size:44px;font-weight:800;letter-spacing:-.03em;font-variant-numeric:tabular-nums}
-.lab small{font-size:18px;margin-left:6px}
-input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:36px;background:transparent;margin:0;cursor:pointer}
-input[type=range]::-webkit-slider-runnable-track{height:6px;background:var(--v)}
-input[type=range]::-moz-range-track{height:6px;background:var(--v)}
-input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:30px;height:30px;background:var(--v);border:4px solid var(--a);outline:3px solid var(--v);margin-top:-12px;border-radius:50%}
-input[type=range]::-moz-range-thumb{width:22px;height:22px;background:var(--v);border:4px solid var(--a);outline:3px solid var(--v);border-radius:50%}
-.seg{display:grid;gap:0;grid-template-columns:repeat(3,1fr);border:3px solid var(--v)}
-.seg button{font:inherit;font-size:19px;padding:14px 6px;border:0;border-left:3px solid var(--v);background:transparent;color:var(--v);cursor:pointer;line-height:1.1;text-align:center}
+html{font-size:calc(16px*var(--s));scroll-padding-top:env(safe-area-inset-top,0px);background:var(--v)}
+body{margin:0;background:var(--a);font-family:"Inter","Helvetica Neue",Arial,sans-serif;font-weight:700;font-size:1.2rem;color:var(--v);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+.in{max-width:60rem;margin:0 auto;padding:0 max(1.25rem,env(safe-area-inset-left,0px))}
+.top,.bot{--bgc:var(--v);background:var(--v);color:var(--a)}
+.mid{--bgc:var(--a);background:var(--a);color:var(--v)}
+.top{padding:2rem 0 2.5rem}.mid{padding:2.25rem 0 2.75rem}.bot{padding:2.25rem 0 3.5rem}
+h1{font-size:clamp(2.6rem,11vw,5.5rem);line-height:.95;margin:0;font-weight:800;letter-spacing:-.03em}
+h2{font-size:clamp(1.8rem,6vw,2.8rem);margin:0 0 1.25rem;font-weight:800;letter-spacing:-.025em;line-height:1}
+.res{display:grid;gap:1.5rem;margin-top:1.5rem;grid-template-columns:minmax(0,1fr)}
+@media(min-width:900px){.res{grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);align-items:end}}
+.z{font-size:calc(clamp(5.5rem,24vw,13rem)*var(--zs));line-height:1.05;font-weight:800;letter-spacing:-.05em;font-variant-numeric:tabular-nums;max-width:100%}
+.cap{font-size:1.15rem;margin-top:.5rem}
+.steps{list-style:none;margin:0;padding:0;font-size:1.1rem}
+.steps li{display:flex;justify-content:space-between;gap:1rem;padding:.65rem 0;border-top:2px solid currentColor}
+.steps li:last-child{border-bottom:2px solid currentColor}
+.steps li span:last-child{text-align:right;white-space:nowrap}
+.warn{display:none;margin-top:1rem;padding:.75rem .9rem;border:3px solid currentColor;font-size:1.05rem;line-height:1.3}
+.f{margin-bottom:1.75rem}
+.lab{display:flex;justify-content:space-between;align-items:baseline;gap:1rem;margin-bottom:.4rem}
+.lab output{font-size:2.6rem;font-weight:800;letter-spacing:-.03em;font-variant-numeric:tabular-nums;white-space:nowrap}
+.lab small{font-size:1.05rem;margin-left:.4rem}
+.lab .num{font:inherit;font-size:2.6rem;font-weight:800;letter-spacing:-.03em;font-variant-numeric:tabular-nums;color:inherit;background:transparent;border:0;border-bottom:2px dotted currentColor;border-radius:0;padding:0;text-align:right;width:3.4ch;appearance:none;-webkit-appearance:none}
+.lab .num:focus{border-bottom-style:solid;outline:none}
+.hint{font-weight:500;font-size:1rem;line-height:1.35;margin:.25rem 0 0}
+input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:2.4rem;background:transparent;margin:0;cursor:pointer;color:inherit}
+input[type=range]::-webkit-slider-runnable-track{height:6px;background:currentColor}
+input[type=range]::-moz-range-track{height:6px;background:currentColor}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:1.9rem;height:1.9rem;background:currentColor;border:4px solid var(--bgc);outline:3px solid currentColor;margin-top:-.75rem;border-radius:50%}
+input[type=range]::-moz-range-thumb{width:1.4rem;height:1.4rem;background:currentColor;border:4px solid var(--bgc);outline:3px solid currentColor;border-radius:50%}
+.seg{display:grid;grid-template-columns:repeat(3,1fr);border:3px solid currentColor}
+.seg button{font:inherit;font-size:1.1rem;padding:.85rem .4rem;border:0;border-left:3px solid currentColor;background:transparent;color:inherit;cursor:pointer;line-height:1.1;text-align:center}
 .seg button:first-child{border-left:0}
-.seg button span{display:block;font-weight:500;font-size:15px;margin-top:4px}
-.seg button[aria-pressed=true]{background:var(--v);color:var(--a)}
-:focus-visible{outline:4px solid var(--v);outline-offset:3px}
-.bot :focus-visible{outline-color:var(--a)}
-.tw{overflow-x:auto}
-table{border-collapse:collapse;width:100%;min-width:560px;text-align:center;font-variant-numeric:tabular-nums}
-th{padding:8px 4px;font-weight:800;font-size:16px;border-bottom:3px solid var(--a)}
-td{padding:8px 4px;border-bottom:1px solid rgba(255,214,165,.35);font-weight:500}
+.seg button span{display:block;font-weight:500;font-size:.9rem;margin-top:.25rem}
+.seg button[aria-pressed=true]{background:currentColor}
+.seg button[aria-pressed=true]>*,.seg button[aria-pressed=true]{-webkit-text-fill-color:var(--bgc)}
+@media(max-width:520px){#skill{grid-template-columns:1fr}#skill button{border-left:0;border-top:3px solid currentColor;display:flex;justify-content:space-between;align-items:baseline;text-align:left;padding:.8rem .9rem}#skill button:first-child{border-top:0}#skill button span{margin:0}}
+:focus-visible{outline:4px solid currentColor;outline-offset:3px}
+.tw{overflow-x:auto;-webkit-overflow-scrolling:touch}
+table{border-collapse:collapse;width:100%;min-width:34rem;text-align:center;font-variant-numeric:tabular-nums}
+th{padding:.5rem .25rem;font-weight:800;font-size:1rem;border-bottom:3px solid currentColor}
+td{padding:.5rem .25rem;border-bottom:1px solid color-mix(in srgb,currentColor 35%,transparent);font-weight:500}
 td.w{text-align:left;font-weight:800;white-space:nowrap}
-td.base{outline:3px solid var(--a);outline-offset:-3px;font-weight:800}
-td.res{background:var(--a);color:var(--v);font-weight:800}
-.note{font-weight:500;font-size:16px;line-height:1.45;max-width:62ch;margin-top:22px}
+td.base{outline:3px solid currentColor;outline-offset:-3px;font-weight:800}
+td.res{background:currentColor;font-weight:800;-webkit-text-fill-color:var(--bgc)}
+.note{font-weight:500;font-size:1rem;line-height:1.45;max-width:62ch;margin-top:1.4rem}
+details{margin-top:1.25rem;border:3px solid currentColor}
+summary{cursor:pointer;padding:.7rem .9rem;font-size:1.05rem;list-style:none}
+summary::-webkit-details-marker{display:none}
+.opt{padding:0 .9rem 1rem}
+.opt .lab{font-size:1.05rem;margin:.9rem 0 .2rem}
+.opt .lab output{font-size:1.4rem}
+.opt .seg button{padding:.6rem .3rem}
+.chk{display:flex;gap:.7rem;align-items:center;margin-top:1rem;font-size:1.05rem;cursor:pointer}
+.chk input{width:1.4rem;height:1.4rem;accent-color:currentColor}
+.rst{font:inherit;font-size:1rem;margin-top:1rem;padding:.55rem .9rem;border:3px solid currentColor;background:transparent;color:inherit;cursor:pointer}
 </style>
 </head>
 <body>
@@ -56,13 +71,22 @@ td.res{background:var(--a);color:var(--v);font-weight:800}
 <div class="res" aria-live="polite">
 <div><div class="z" id="z">–</div><div class="cap">empfohlene Bindungseinstellung</div></div>
 <div><ul class="steps" id="steps"></ul><div class="warn" id="warn"></div></div>
-</div></div></header>
+</div>
+<details><summary>Anzeige anpassen</summary><div class="opt">
+<div class="lab"><label for="sz">Textgröße</label><output id="szo"></output></div>
+<input id="sz" type="range" min="0.85" max="1.4" step="0.05" value="1">
+<div class="lab">Größe des Z-Werts</div>
+<div class="seg" id="zsz"><button data-z="0.7" aria-pressed="false">Klein</button><button data-z="1" aria-pressed="true">Mittel</button><button data-z="1.2" aria-pressed="false">Groß</button></div>
+<label class="chk"><input type="checkbox" id="swap"> Farben tauschen</label>
+<button class="rst" id="rst">Zurücksetzen</button>
+</div></details>
+</div></header>
 
 <section class="mid"><div class="in">
 <h2>Deine Daten</h2>
-<div class="f"><div class="lab"><label for="kg">Gewicht</label><span><output id="kgo"></output><small>kg</small></span></div><input id="kg" type="range" min="10" max="130" value="70"><p class="hint">Körpergewicht ohne Skiausrüstung: ohne Skischuhe, Helm und Skibekleidung gewogen.</p></div>
-<div class="f"><div class="lab"><label for="mm">Sohlenlänge des Skischuhs</label><span><output id="mmo"></output><small>mm</small></span></div><input id="mm" type="range" min="180" max="360" value="300"></div>
-<div class="f"><div class="lab"><label for="age">Alter</label><span><output id="ageo"></output><small>Jahre</small></span></div><input id="age" type="range" min="4" max="85" value="35"></div>
+<div class="f"><div class="lab"><label for="kg">Gewicht</label><span><input class="num" id="kgo" type="text" inputmode="numeric" pattern="[0-9]*" autocomplete="off" enterkeyhint="done" aria-label="Gewicht in kg eingeben"><small>kg</small></span></div><input id="kg" type="range" min="10" max="130" value="70"><p class="hint">Körpergewicht ohne Skiausrüstung: ohne Skischuhe, Helm und Skibekleidung gewogen.</p></div>
+<div class="f"><div class="lab"><label for="mm">Sohlenlänge des Skischuhs</label><span><input class="num" id="mmo" type="text" inputmode="numeric" pattern="[0-9]*" autocomplete="off" enterkeyhint="done" aria-label="Sohlenlänge in mm eingeben"><small>mm</small></span></div><input id="mm" type="range" min="180" max="360" value="300"></div>
+<div class="f"><div class="lab"><label for="age">Alter</label><span><input class="num" id="ageo" type="text" inputmode="numeric" pattern="[0-9]*" autocomplete="off" enterkeyhint="done" aria-label="Alter in Jahren eingeben"><small>Jahre</small></span></div><input id="age" type="range" min="4" max="85" value="35"></div>
 <div class="f" style="margin-bottom:0"><div class="lab">Fahrkönnen</div>
 <div class="seg" id="skill">
 <button data-v="0" aria-pressed="true">Anfänger<span>Z-Wert</span></button>
@@ -83,13 +107,12 @@ var W=["10 – 13","14 – 17","18 – 21","22 – 25","26 – 30","31 – 35","
 var COLS=["bis 250","251 – 270","271 – 290","291 – 310","311 – 330","über 330"];
 var LIM=[13,17,21,25,30,35,41,48,57,66,78,94];
 var $=function(i){return document.getElementById(i)};
-var skill=0;
+var skill=0,H=document.documentElement,P={s:1,z:1,swap:0};
 function fmt(v){return v==null?"–":v.toFixed(2).replace(".",",")}
 function rowOf(kg){for(var i=0;i<LIM.length;i++)if(kg<=LIM[i])return i;return 12}
 function colOf(mm){return mm<=250?0:mm<=270?1:mm<=290?2:mm<=310?3:mm<=330?4:5}
 function render(){
-var kg=+$("kg").value,mm=+$("mm").value,age=+$("age").value;
-$("kgo").textContent=kg;$("mmo").textContent=mm>=360?"über 330":mm;$("ageo").textContent=age;
+var kg=G.kg,mm=G.mm,age=G.age;
 var r=rowOf(kg),c=colOf(mm),ageUp=(age<10||age>50)?1:0;
 var base=T[r][c],tr=Math.max(0,Math.min(14,r+skill-ageUp)),res=T[tr][c];
 var warn=$("warn");warn.style.display="none";
@@ -104,10 +127,29 @@ h+="<td class='"+cl+"'>"+(T[i][j]==null?"":fmt(T[i][j]))+"</td>"}
 h+="</tr>"}
 $("tbl").innerHTML=h;
 }
-["kg","mm","age"].forEach(function(i){$(i).addEventListener("input",render)});
+function apply(){
+H.style.setProperty("--s",P.s);H.style.setProperty("--zs",P.z);
+if(P.swap)H.setAttribute("data-swap","1");else H.removeAttribute("data-swap");
+$("sz").value=P.s;$("szo").textContent=Math.round(P.s*100)+" %";$("swap").checked=!!P.swap;
+document.querySelectorAll("#zsz button").forEach(function(b){b.setAttribute("aria-pressed",+b.dataset.z===P.z)});
+}
+function save(){try{localStorage.setItem("zwert-prefs",JSON.stringify(P))}catch(e){}}
+try{var q=JSON.parse(localStorage.getItem("zwert-prefs")||"null");if(q){P.s=+q.s||1;P.z=+q.z||1;P.swap=q.swap?1:0}}catch(e){}
+$("sz").addEventListener("input",function(){P.s=+this.value;apply();save()});
+$("swap").addEventListener("change",function(){P.swap=this.checked?1:0;apply();save()});
+$("rst").addEventListener("click",function(){P={s:1,z:1,swap:0};apply();save()});
+document.querySelectorAll("#zsz button").forEach(function(b){b.addEventListener("click",function(){P.z=+b.dataset.z;apply();save()})});
+var G={kg:70,mm:300,age:35},LM={kg:[10,200],mm:[150,450],age:[1,99]};
+["kg","mm","age"].forEach(function(k){
+var s=$(k),t=$(k+"o");t.value=G[k];
+s.addEventListener("input",function(){G[k]=+s.value;t.value=G[k];render()});
+t.addEventListener("input",function(){var d=t.value.replace(/\D/g,"");if(d!==t.value)t.value=d;var n=+d;if(d&&n>=LM[k][0]&&n<=LM[k][1]){G[k]=n;s.value=n;render()}});
+t.addEventListener("blur",function(){t.value=G[k]});
+t.addEventListener("focus",function(){t.select()});
+});
 document.querySelectorAll("#skill button").forEach(function(b){b.addEventListener("click",function(){
 skill=+b.dataset.v;document.querySelectorAll("#skill button").forEach(function(x){x.setAttribute("aria-pressed",x===b)});render()})});
-render();
+apply();render();
 </script>
 </body>
 </html>
